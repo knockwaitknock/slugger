@@ -63,15 +63,8 @@ module Slugger
         s = self.send("#{self.slugger_options[:title_column]}").encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
       end
 
-      # Remove apostrophes
-      s.gsub!(/\'/, '')
-      # Replace all non-word chars to spaces
-      s.gsub!(/\W+/, ' ')
-      s.strip!
-      # Replace spaces with dashes or custom substitution character
-      s.gsub!(/\ +/, slugger_options[:substitution_char].to_s)
-      s.downcase! if slugger_options[:downcase]
 
+      s = s.to_slug.transliterate(:russian).normalize.to_s
       if slugger_options[:max_length]
         s = s[0..(slugger_options[:max_length] - 1)]
         s = s[0..-2] if s[-1] == slugger_options[:substitution_char].to_s
