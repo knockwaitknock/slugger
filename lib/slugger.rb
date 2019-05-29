@@ -13,7 +13,8 @@ module Slugger
         :slug_column       => 'slug',
         :substitution_char => '-',
         :downcase          => true,
-        :on_conflict       => :error
+        :on_conflict       => :error,
+        :uniqueness        => true
       }
 
       self.slugger_options = default_options.merge(options)
@@ -35,7 +36,7 @@ module Slugger
       if slugger_options[:scope]
         validates slugger_options[:slug_column].to_sym,
                   :uniqueness => { :scope => slugger_options[:scope] }
-      else
+      elsif slugger_options[:uniqueness]
         validates slugger_options[:slug_column].to_sym,
                   :uniqueness => true
       end
