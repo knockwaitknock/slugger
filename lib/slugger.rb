@@ -45,6 +45,7 @@ module Slugger
         lambda { self.send(slugger_options[:title_column]) }
 
       include InstanceMethods
+      include ActiveModel::Dirty
     end
   end
   module InstanceMethods
@@ -52,7 +53,7 @@ module Slugger
     private
 
     def permalize
-      return unless self.send("#{self.slugger_options[:slug_column]}").blank?
+      return if self.send("#{self.slugger_options[:slug_column]}").present? && !self.send("#{self.slugger_options[:slug_column]}_changed?")
 
       if slugger_options[:title_column].is_a?(Array)
         s = ""
@@ -60,6 +61,8 @@ module Slugger
           s = "#{s} #{self.send(m)}"
         end
         s = s.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
+      elsif self.send("#{self.slugger_options[:slug_column]}_changed?")
+        s = self.send("#{self.slugger_options[:slug_column]}").encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
       else
         s = self.send("#{self.slugger_options[:title_column]}").encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
       end
@@ -77,7 +80,7 @@ module Slugger
     end
 
     def permalize_on_blank
-      permalize if self[slugger_options[:slug_column]].blank?
+      permalize if self[slugger_options[:slug_column]].blank? || self.send("#{self.slugger_options[:slug_column]}_changed?")
     end
 
     def slug_conflict_resolution(append=nil)
