@@ -1,4 +1,5 @@
 require 'slugger/version'
+require 'babosa'
 require 'active_record'
 
 module Slugger
