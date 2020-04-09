@@ -11,8 +11,6 @@ Gem::Specification.new do |s|
   s.summary     = %q{Slugger is yet another slug generator.}
   s.description = %q{Slugger is yet another slug generator.}
 
-  s.rubyforge_project = "slugger"
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }

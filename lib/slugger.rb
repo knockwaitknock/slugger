@@ -1,4 +1,5 @@
 require 'slugger/version'
+require 'babosa'
 require 'active_record'
 
 module Slugger
@@ -61,7 +62,7 @@ module Slugger
           s = "#{s} #{self.send(m)}"
         end
         s = s.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
-      elsif self.send("#{self.slugger_options[:slug_column]}_changed?")
+      elsif self.send("#{self.slugger_options[:slug_column]}_changed?") && self.send(self.slugger_options[:slug_column]).present?
         s = self.send("#{self.slugger_options[:slug_column]}").encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
       else
         s = self.send("#{self.slugger_options[:title_column]}").encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
