@@ -14,7 +14,7 @@ module Slugger
         :slug_column       => 'slug',
         :substitution_char => '-',
         :downcase          => true,
-        :on_conflict       => :error,
+        :on_conflict       => :append_id,
         :uniqueness        => true
       }
 
@@ -55,8 +55,8 @@ module Slugger
 
     def permalize
       return if self.send("#{self.slugger_options[:slug_column]}").present? && !self.send("#{self.slugger_options[:slug_column]}_changed?")
-      return unless self.send("#{self.slugger_options[:slug_column]}").present?
-      
+      return unless self.send("#{self.slugger_options[:title_column]}").present?
+
       if slugger_options[:title_column].is_a?(Array)
         s = ""
         self.slugger_options[:title_column].each do |m|
