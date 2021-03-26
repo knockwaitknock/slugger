@@ -15,7 +15,7 @@ module Slugger
         :substitution_char => '-',
         :downcase          => true,
         :on_conflict       => :append_id,
-        :uniqueness        => true
+        :uniqueness        => false
       }
 
       self.slugger_options = default_options.merge(options)
