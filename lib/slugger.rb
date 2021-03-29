@@ -14,7 +14,7 @@ module Slugger
         :slug_column       => 'slug',
         :substitution_char => '-',
         :downcase          => true,
-        :on_conflict       => :append_id,
+        :on_conflict       => :concat_random_chars,
         :uniqueness        => false
       }
 
@@ -97,7 +97,7 @@ module Slugger
     def slug_conflict_resolution_concat_random_chars(append)
       chars = ("a".."z").to_a + ("1".."9").to_a
       random_chars = Array.new(3, '').collect{chars[rand(chars.size)]}.join
-      self.send("#{self.slugger_options[:slug_column]}=", "#{self.slugger_options[:slug_column]}#{self.slugger_options[:substitution_char]}#{random_chars}")
+      self.send("#{self.slugger_options[:slug_column]}=", "#{self[self.slugger_options[:slug_column]]}#{self.slugger_options[:substitution_char]}#{random_chars}")
       slug_conflict_resolution
     end
 
