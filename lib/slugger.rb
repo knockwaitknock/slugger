@@ -78,7 +78,7 @@ module Slugger
 
       self.send("#{self.slugger_options[:slug_column]}=", s)
 
-      slug_conflict_resolution
+      slug_conflict_resolution if slugger_options[:uniqueness]
     end
 
     def permalize_on_blank
